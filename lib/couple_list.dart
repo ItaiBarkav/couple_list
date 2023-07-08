@@ -1,6 +1,9 @@
-import 'package:couple_list/tasks_page.dart';
-import 'package:couple_list/rewards_page.dart';
 import 'package:flutter/material.dart';
+
+import 'rewards_page.dart';
+import 'tasks_page.dart';
+import 'widgets/add_task_fab.dart';
+import 'widgets/cl_app_bar.dart';
 
 class CoupleList extends StatefulWidget {
   const CoupleList({Key? key}) : super(key: key);
@@ -19,73 +22,9 @@ class _CoupleListState extends State<CoupleList> {
       child: GestureDetector(
         onPanUpdate: pageUpdate,
         child: Scaffold(
-          appBar: AppBar(
-            title: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('CoupleList'),
-                Row(
-                  children: [
-                    Image(
-                      image: AssetImage('assets/icons/icecream.png'),
-                      width: 40,
-                      height: 40,
-                    ),
-                    Text('20'),
-                  ],
-                )
-              ],
-            ),
-            backgroundColor: Colors.yellow,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(32),
-              ),
-            ),
-          ),
+          appBar: const ClAppBar(),
           body: pages[currentPage],
-          floatingActionButton: FloatingActionButton(
-            shape: const CircleBorder(),
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) => SimpleDialog(
-                title: const Center(
-                  child: Text('Add new task'),
-                ),
-                children: [
-                  const TextField(
-                    decoration: InputDecoration(
-                        labelText: 'Task', hintText: 'Enter a task'),
-                  ),
-                  const Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                              labelText: 'Score',
-                              hintText: 'Enter task\'s score'),
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-                      Image(
-                        image: AssetImage('assets/icons/icecream.png'),
-                        width: 40,
-                        height: 40,
-                      ),
-                    ],
-                  ),
-                  ElevatedButton(
-                      style: const ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(Colors.yellow),
-                      ),
-                      onPressed: () => debugPrint('Create completed'),
-                      child: const Text('Create')),
-                ],
-              ),
-            ),
-            child: const Icon(Icons.add, size: 32),
-          ),
+          floatingActionButton: const AddTaskFab(),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           bottomNavigationBar: BottomAppBar(
@@ -111,15 +50,9 @@ class _CoupleListState extends State<CoupleList> {
 
   void pageUpdate(details) {
     if (details.delta.dx > 0) {
-      setState(() {
-        currentPage = 0;
-      });
-    }
-
-    if (details.delta.dx < 0) {
-      setState(() {
-        currentPage = 1;
-      });
+      setState(() => currentPage = 0);
+    } else {
+      setState(() => currentPage = 1);
     }
   }
 }
