@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'rewards_page.dart';
-import 'tasks_page.dart';
-import 'widgets/add_task_fab.dart';
-import 'widgets/cl_app_bar.dart';
-import 'widgets/cl_bottom_app_bar.dart';
+import 'rewards_screen.dart';
+import 'tasks_screen.dart';
+import '../widgets/add_task_fab.dart';
+import '../widgets/cl_app_bar.dart';
+import '../widgets/cl_bottom_app_bar.dart';
 
 class CoupleList extends StatefulWidget {
   const CoupleList({Key? key}) : super(key: key);
@@ -29,7 +29,7 @@ class _CoupleListState extends State<CoupleList> {
       appBar: const ClAppBar(),
       body: PageView(
         controller: pageController,
-        children: const [TasksPage(), RewardsPage()],
+        children: const [TasksScreen(), RewardsScreen()],
       ),
       floatingActionButton: const AddTaskFab(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

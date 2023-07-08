@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/task.dart';
+import '../widgets/task.dart';
 
-class TasksPage extends StatelessWidget {
-  const TasksPage({super.key});
+class TasksScreen extends StatelessWidget {
+  const TasksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
