@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../providers/rewards_provider.dart';
 import 'icecream_icon.dart';
 
-class ClAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const ClAppBar({Key? key}) : super(key: key);
+class ClAppBar extends HookConsumerWidget implements PreferredSizeWidget {
+  const ClAppBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    int sum =
+        ref.watch(rewardsProvider).fold(0, (sum, item) => sum + item.cost);
+
     return AppBar(
-      title: const Row(
+      title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text('CoupleList'),
+          const Text('CoupleList'),
           Row(
             children: [
-              IcecreamIcon(),
-              Text('20'),
+              const IcecreamIcon(),
+              Text('$sum'),
             ],
           )
         ],

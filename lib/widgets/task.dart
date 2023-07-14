@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../providers/rewards_provider.dart';
+import '../providers/tasks_provider.dart';
 import 'icecream_icon.dart';
+import '../models/task.dart' as model;
 
-class Task extends StatelessWidget {
-  const Task({Key? key}) : super(key: key);
+class Task extends HookConsumerWidget {
+  const Task({super.key, required this.task});
+
+  final model.Task task;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       shape: const RoundedRectangleBorder(
         side: BorderSide(color: Colors.black, width: 1),
@@ -16,31 +22,36 @@ class Task extends StatelessWidget {
         onTap: () => showDialog(
           context: context,
           builder: (context) => SimpleDialog(
-            title: const Row(
+            title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                IcecreamIcon(),
-                Text('20'),
+                const IcecreamIcon(),
+                Text(task.cost.toString()),
               ],
             ),
             children: [
-              const Text('Clean the dishes'),
+              Text(task.task),
               ElevatedButton(
-                  style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Colors.yellow),
-                  ),
-                  onPressed: () => debugPrint('Task completed'),
-                  child: const Text('Complete')),
+                style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(Colors.yellow),
+                ),
+                onPressed: () {
+                  ref.read(tasksProvider.notifier).remove(task);
+                  ref.read(rewardsProvider.notifier).add(task);
+                  Navigator.pop(context);
+                },
+                child: const Text('Complete'),
+              ),
             ],
           ),
         ),
-        title: const Text('Clean the dishes'),
-        trailing: const Row(
+        title: Text(task.task),
+        trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IcecreamIcon(),
-            Text('20'),
+            const IcecreamIcon(),
+            Text(task.cost.toString()),
           ],
         ),
       ),

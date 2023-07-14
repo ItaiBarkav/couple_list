@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/task.dart';
+import '../providers/tasks_provider.dart';
 import 'icecream_icon.dart';
 
-class AddTaskFab extends StatefulWidget {
+class AddTaskFab extends ConsumerWidget {
   const AddTaskFab({Key? key}) : super(key: key);
 
   @override
-  State<AddTaskFab> createState() => _AddTaskFabState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextEditingController taskTEC = TextEditingController();
+    final TextEditingController costTEC = TextEditingController();
 
-class _AddTaskFabState extends State<AddTaskFab> {
-  @override
-  Widget build(BuildContext context) {
     return FloatingActionButton(
       shape: const CircleBorder(),
       onPressed: () => showDialog(
@@ -21,28 +22,48 @@ class _AddTaskFabState extends State<AddTaskFab> {
             child: Text('Add new task'),
           ),
           children: [
-            const TextField(
-              decoration:
-                  InputDecoration(labelText: 'Task', hintText: 'Enter a task'),
+            TextField(
+              controller: taskTEC,
+              autofocus: true,
+              decoration: const InputDecoration(
+                labelText: 'Task',
+                hintText: 'Enter a task',
+              ),
             ),
-            const Row(
+            Row(
               children: [
                 Expanded(
                   child: TextField(
-                    decoration: InputDecoration(
-                        labelText: 'Score', hintText: 'Enter task\'s score'),
+                    controller: costTEC,
+                    decoration: const InputDecoration(
+                      labelText: 'Score',
+                      hintText: 'Enter task\'s score',
+                    ),
                     keyboardType: TextInputType.number,
                   ),
                 ),
-                IcecreamIcon(),
+                const IcecreamIcon(),
               ],
             ),
             ElevatedButton(
-                style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.yellow),
-                ),
-                onPressed: () => debugPrint('Create completed'),
-                child: const Text('Create')),
+              style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Colors.yellow),
+              ),
+              onPressed: () {
+                ref.read(tasksProvider.notifier).add(
+                      Task(
+                        createdBy: '',
+                        task: taskTEC.text,
+                        cost: int.parse(costTEC.text),
+                        status: 'new',
+                      ),
+                    );
+                taskTEC.clear();
+                costTEC.clear();
+                Navigator.pop(context);
+              },
+              child: const Text('Create'),
+            ),
           ],
         ),
       ),

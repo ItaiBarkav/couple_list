@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'icecream_icon.dart';
+import '../models/task.dart';
 
-class Reward extends StatelessWidget {
-  const Reward({Key? key}) : super(key: key);
+class Reward extends HookConsumerWidget {
+  const Reward({super.key, required this.reward});
+
+  final Task reward;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       child: ListTile(
-        title: const Text('15 min massage'),
+        title: Text(reward.task),
         subtitle: ElevatedButton(
           style: const ButtonStyle(
             backgroundColor: MaterialStatePropertyAll(Colors.yellow),
           ),
           onPressed: () => debugPrint('Get reward'),
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IcecreamIcon(),
-              Text('20'),
+              const IcecreamIcon(),
+              Text(reward.cost.toString()),
             ],
           ),
         ),

@@ -1,32 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../providers/rewards_provider.dart';
 import '../widgets/reward.dart';
+import '../models/task.dart' as model;
 
-class RewardsScreen extends StatefulWidget {
+class RewardsScreen extends HookConsumerWidget {
   const RewardsScreen({Key? key}) : super(key: key);
 
   @override
-  State<RewardsScreen> createState() => _RewardsScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    List<model.Task> rewards = ref.watch(rewardsProvider);
 
-class _RewardsScreenState extends State<RewardsScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Title(color: Colors.blue, child: const Text('Rewards')),
-          Expanded(
-            child: ListView(
-              children: const [
-                Reward(),
-                Reward(),
-                Reward(),
-              ],
-            ),
+    return Column(
+      children: [
+        const Text('Rewards'),
+        Expanded(
+          child: ListView(
+            children: rewards.map((reward) => Reward(reward: reward)).toList(),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
