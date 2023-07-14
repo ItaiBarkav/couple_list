@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../providers/new_reward_provider.dart';
 import '../providers/rewards_provider.dart';
 import '../providers/tasks_provider.dart';
 import 'icecream_icon.dart';
@@ -39,6 +40,7 @@ class Task extends HookConsumerWidget {
                 onPressed: () {
                   ref.read(tasksProvider.notifier).remove(task);
                   ref.read(rewardsProvider.notifier).add(task);
+                  ref.read(newRewardProvider.notifier).update(true);
                   Navigator.pop(context);
                 },
                 child: const Text('Complete'),
