@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../providers/new_reward_provider.dart';
 import '../providers/rewards_provider.dart';
+import '../providers/task_completed_provider.dart';
 import '../providers/tasks_provider.dart';
 import 'icecream_icon.dart';
 import '../models/task.dart' as model;
@@ -41,6 +42,7 @@ class Task extends HookConsumerWidget {
                   ref.read(tasksProvider.notifier).remove(task);
                   ref.read(rewardsProvider.notifier).add(task);
                   ref.read(newRewardProvider.notifier).update(true);
+                  ref.read(taskCompletedProvider.notifier).update(true);
                   Navigator.pop(context);
                 },
                 child: const Text('Complete'),
