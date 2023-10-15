@@ -1,5 +1,6 @@
-import 'package:couple_list/models/task.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../models/task.dart';
 
 part 'tasks_provider.g.dart';
 

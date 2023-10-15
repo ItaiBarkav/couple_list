@@ -1,5 +1,6 @@
-import 'package:couple_list/models/task.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../models/task.dart';
 
 part 'rewards_provider.g.dart';
 
@@ -14,21 +15,9 @@ class Rewards extends _$Rewards {
     state.add(reward);
     state = [...state];
   }
+
+  void remove(Task reward) {
+    state.remove(reward);
+    state = [...state];
+  }
 }
-
-// import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-// import '../models/task.dart';
-
-// class RewardListNotifier extends StateNotifier<List<Task>> {
-//   RewardListNotifier() : super([]);
-
-//   void add(Task reward) {
-//     state.add(reward);
-//     state = [...state];
-//   }
-// }
-
-// final rewardsProvider = StateNotifierProvider<RewardListNotifier, List<Task>>(
-//   (ref) => RewardListNotifier(),
-// );

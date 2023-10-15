@@ -1,9 +1,14 @@
+import '/services/db.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
+import '../models/user.dart';
+import '../providers/cluser_provider.dart';
 import '../providers/new_reward_provider.dart';
+import '../providers/partner_provider.dart';
 import '../providers/task_completed_provider.dart';
+import '../providers/users_provider.dart';
 import 'rewards_screen.dart';
 import 'tasks_screen.dart';
 import '../widgets/add_task_fab.dart';
@@ -11,7 +16,7 @@ import '../widgets/cl_app_bar.dart';
 import '../widgets/cl_bottom_app_bar.dart';
 
 class CoupleList extends StatefulHookConsumerWidget {
-  const CoupleList({Key? key}) : super(key: key);
+  const CoupleList({super.key});
 
   @override
   ConsumerState<CoupleList> createState() => _CoupleListState();
@@ -29,8 +34,14 @@ class _CoupleListState extends ConsumerState<CoupleList> {
 
   @override
   Widget build(BuildContext context) {
+    List<User> users = ref.watch(usersProvider);
+
+    _choosePartner(users);
+
     return Scaffold(
-      appBar: const ClAppBar(),
+      appBar: ClAppBar(
+        title: 'Hi ${ref.watch(clUserProvider)!.displayName}',
+      ),
       body: AnimatedContainer(
         duration: const Duration(seconds: 2),
         width: ref.watch(taskCompletedProvider) ? 600 : double.maxFinite,
@@ -55,5 +66,46 @@ class _CoupleListState extends ConsumerState<CoupleList> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: ClBottomAppBar(pageController: pageController),
     );
+  }
+
+  void _choosePartner(List<User> users) {
+    User? clUser = ref.watch(clUserProvider);
+    User? partner = users.first;
+    DbService dbService = DbService();
+
+    if (ref.watch(partnerProvider) == null) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => showDialog(
+          context: context,
+          builder: (_) => SimpleDialog(
+            title: const Text('Choose partner'),
+            children: [
+              DropdownButton(
+                value: partner,
+                items: users.map<DropdownMenuItem<User>>(
+                  (user) {
+                    return DropdownMenuItem<User>(
+                      value: user,
+                      child: Text("${user.displayName} (${user.email})"),
+                    );
+                  },
+                ).toList(),
+                onChanged: (user) {
+                  partner = user;
+                },
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  ref.read(partnerProvider.notifier).set(partner);
+                  dbService.addCouple(clUser!, partner!);
+                  Navigator.pop(context);
+                },
+                child: const Text('Select'),
+              )
+            ],
+          ),
+        ),
+      );
+    }
   }
 }

@@ -6,8 +6,9 @@ import 'icecream_icon.dart';
 
 class ClAppBar extends HookConsumerWidget implements PreferredSizeWidget {
   final bool showScore;
+  final String title;
 
-  const ClAppBar({super.key, this.showScore = true});
+  const ClAppBar({super.key, this.showScore = true, this.title = 'CoupleList'});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,7 +19,7 @@ class ClAppBar extends HookConsumerWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('CoupleList'),
+          Text(title),
           showScore
               ? Row(
                   children: [

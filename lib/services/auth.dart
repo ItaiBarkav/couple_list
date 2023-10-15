@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../models/user.dart' as user;
+import '../models/user.dart' as model;
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<user.User?> signInWithGoogle() async {
+  Future<model.User?> signInWithGoogle() async {
     GoogleSignInAccount? account = await GoogleSignIn().signIn();
     GoogleSignInAuthentication authentication = await account!.authentication;
     OAuthCredential credential = GoogleAuthProvider.credential(
@@ -14,7 +14,7 @@ class AuthService {
         idToken: authentication.idToken);
 
     return _auth.signInWithCredential(credential).then(
-          (result) => user.User(
+          (result) => model.User(
               email: result.user!.email!,
               displayName: result.user!.displayName!),
         );
