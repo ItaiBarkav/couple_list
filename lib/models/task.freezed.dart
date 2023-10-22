@@ -20,7 +20,7 @@ Task _$TaskFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Task {
-  String get createdBy => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   String get task => throw _privateConstructorUsedError;
   int get cost => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
@@ -35,7 +35,7 @@ abstract class $TaskCopyWith<$Res> {
   factory $TaskCopyWith(Task value, $Res Function(Task) then) =
       _$TaskCopyWithImpl<$Res, Task>;
   @useResult
-  $Res call({String createdBy, String task, int cost, String status});
+  $Res call({String id, String task, int cost, String status});
 }
 
 /// @nodoc
@@ -51,15 +51,15 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? createdBy = null,
+    Object? id = null,
     Object? task = null,
     Object? cost = null,
     Object? status = null,
   }) {
     return _then(_value.copyWith(
-      createdBy: null == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
       task: null == task
           ? _value.task
@@ -83,7 +83,7 @@ abstract class _$$_TaskCopyWith<$Res> implements $TaskCopyWith<$Res> {
       __$$_TaskCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String createdBy, String task, int cost, String status});
+  $Res call({String id, String task, int cost, String status});
 }
 
 /// @nodoc
@@ -95,15 +95,15 @@ class __$$_TaskCopyWithImpl<$Res> extends _$TaskCopyWithImpl<$Res, _$_Task>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? createdBy = null,
+    Object? id = null,
     Object? task = null,
     Object? cost = null,
     Object? status = null,
   }) {
     return _then(_$_Task(
-      createdBy: null == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
               as String,
       task: null == task
           ? _value.task
@@ -125,25 +125,26 @@ class __$$_TaskCopyWithImpl<$Res> extends _$TaskCopyWithImpl<$Res, _$_Task>
 @JsonSerializable()
 class _$_Task implements _Task {
   const _$_Task(
-      {required this.createdBy,
+      {required this.id,
       required this.task,
       required this.cost,
-      required this.status});
+      this.status = 'new'});
 
   factory _$_Task.fromJson(Map<String, dynamic> json) => _$$_TaskFromJson(json);
 
   @override
-  final String createdBy;
+  final String id;
   @override
   final String task;
   @override
   final int cost;
   @override
+  @JsonKey()
   final String status;
 
   @override
   String toString() {
-    return 'Task(createdBy: $createdBy, task: $task, cost: $cost, status: $status)';
+    return 'Task(id: $id, task: $task, cost: $cost, status: $status)';
   }
 
   @override
@@ -151,8 +152,7 @@ class _$_Task implements _Task {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Task &&
-            (identical(other.createdBy, createdBy) ||
-                other.createdBy == createdBy) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.task, task) || other.task == task) &&
             (identical(other.cost, cost) || other.cost == cost) &&
             (identical(other.status, status) || other.status == status));
@@ -160,7 +160,7 @@ class _$_Task implements _Task {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, createdBy, task, cost, status);
+  int get hashCode => Object.hash(runtimeType, id, task, cost, status);
 
   @JsonKey(ignore: true)
   @override
@@ -178,15 +178,15 @@ class _$_Task implements _Task {
 
 abstract class _Task implements Task {
   const factory _Task(
-      {required final String createdBy,
+      {required final String id,
       required final String task,
       required final int cost,
-      required final String status}) = _$_Task;
+      final String status}) = _$_Task;
 
   factory _Task.fromJson(Map<String, dynamic> json) = _$_Task.fromJson;
 
   @override
-  String get createdBy;
+  String get id;
   @override
   String get task;
   @override

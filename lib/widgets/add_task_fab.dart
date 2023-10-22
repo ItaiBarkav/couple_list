@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:uuid/uuid.dart';
 
 import '../models/task.dart';
-import '../providers/tasks_provider.dart';
+import '../models/user.dart';
+import '../providers/cluser_provider.dart';
+import '../services/db.dart';
 import 'icecream_icon.dart';
 
 class AddTaskFab extends ConsumerWidget {
@@ -12,6 +15,8 @@ class AddTaskFab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final TextEditingController taskTEC = TextEditingController();
     final TextEditingController costTEC = TextEditingController();
+    final DbService dbService = DbService();
+    User? user = ref.watch(clUserProvider);
 
     return FloatingActionButton(
       shape: const CircleBorder(),
@@ -50,14 +55,12 @@ class AddTaskFab extends ConsumerWidget {
                 backgroundColor: MaterialStatePropertyAll(Colors.yellow),
               ),
               onPressed: () {
-                ref.read(tasksProvider.notifier).add(
-                      Task(
-                        createdBy: '',
-                        task: taskTEC.text,
-                        cost: int.parse(costTEC.text),
-                        status: 'new',
-                      ),
-                    );
+                Task task = Task(
+                  id: const Uuid().v4(),
+                  task: taskTEC.text,
+                  cost: int.parse(costTEC.text),
+                );
+                dbService.addTask(user!, task);
                 taskTEC.clear();
                 costTEC.clear();
                 Navigator.pop(context);

@@ -14,7 +14,7 @@ class SignIn extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AuthService auth = AuthService();
-    final DbService db = DbService();
+    final DbService dbService = DbService();
 
     return Scaffold(
       appBar: const ClAppBar(showScore: false),
@@ -31,13 +31,13 @@ class SignIn extends HookConsumerWidget {
               ),
               onPressed: () async {
                 User? user = await auth.signInWithGoogle();
-                List<User> users = await db.getUsers();
 
                 if (user == null) {
                   debugPrint('error signing in');
                 } else {
+                  List<User> users = await dbService.getUsers(user);
                   ref.read(clUserProvider.notifier).set(user);
-                  db.addUser(user);
+                  dbService.addUser(user);
 
                   if (users.isNotEmpty) {
                     ref.read(usersProvider.notifier).set(users);

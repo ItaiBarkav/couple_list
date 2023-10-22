@@ -6,7 +6,7 @@ part of 'rewards_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$rewardsHash() => r'2ac7768c84e124606abc1238f7e8dedd788937fb';
+String _$rewardsHash() => r'bbc384caf7dab6541a9b17590281e09b2e3c7928';
 
 /// See also [Rewards].
 @ProviderFor(Rewards)

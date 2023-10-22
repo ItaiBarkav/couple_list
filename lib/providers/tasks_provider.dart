@@ -11,6 +11,14 @@ class Tasks extends _$Tasks {
     return [];
   }
 
+  void set(List<Task>? tasks) {
+    if (tasks == null) {
+      return;
+    }
+
+    state = [...tasks];
+  }
+
   void add(Task task) {
     state.add(task);
     state = [...state];
