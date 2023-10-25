@@ -4,7 +4,7 @@ import '../models/user.dart';
 
 part 'cluser_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class ClUser extends _$ClUser {
   @override
   User? build() {

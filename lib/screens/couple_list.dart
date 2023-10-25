@@ -1,4 +1,3 @@
-import '../providers/tasks_provider.dart';
 import '/services/db.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -99,9 +98,6 @@ class _CoupleListState extends ConsumerState<CoupleList> {
                 onPressed: () async {
                   ref.read(partnerProvider.notifier).set(partner);
                   dbService.addCouple(clUser!, partner!);
-                  ref.read(tasksProvider.notifier).set(
-                        await dbService.getTasks(partner!),
-                      );
 
                   if (!mounted) {
                     return;

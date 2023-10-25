@@ -4,7 +4,7 @@ import '../models/task.dart';
 
 part 'rewards_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class Rewards extends _$Rewards {
   @override
   List<Task> build() {

@@ -4,7 +4,7 @@ import '../models/user.dart';
 
 part 'partner_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class Partner extends _$Partner {
   @override
   User? build() {

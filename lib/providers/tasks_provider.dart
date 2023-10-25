@@ -1,31 +1,30 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../models/task.dart';
+import '../models/user.dart';
+import '../services/db.dart';
+import 'partner_provider.dart';
 
 part 'tasks_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class Tasks extends _$Tasks {
-  @override
-  List<Task> build() {
-    return [];
-  }
+  static DbService dbService = DbService();
 
-  void set(List<Task>? tasks) {
-    if (tasks == null) {
-      return;
+  @override
+  Stream<List<Task>> build() {
+    User? partner = ref.watch(partnerProvider);
+
+    if (partner == null) {
+      return const Stream.empty();
     }
 
-    state = [...tasks];
-  }
-
-  void add(Task task) {
-    state.add(task);
-    state = [...state];
+    return dbService.getTasks(partner);
   }
 
   void remove(Task task) {
-    state.remove(task);
-    state = [...state];
+    User? partner = ref.watch(partnerProvider);
+
+    dbService.removeTask(partner!, task);
   }
 }

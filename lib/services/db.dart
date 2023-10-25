@@ -5,12 +5,12 @@ import '../models/user.dart';
 
 class DbService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-  static const String _usersCollection = 'users';
-  static const String _couplesCollection = 'couples';
-  static const String _tasksCollection = 'tasks';
+  static const String _users = 'users';
+  static const String _couples = 'couples';
+  static const String _tasks = 'tasks';
 
   void addUser(User user) async {
-    await _db.collection(_usersCollection).doc(user.email).set(
+    await _db.collection(_users).doc(user.email).set(
       {
         'displayName': user.displayName,
       },
@@ -18,7 +18,7 @@ class DbService {
   }
 
   Future<List<User>> getUsers(User user) async {
-    QuerySnapshot usersSnapshot = await _db.collection(_usersCollection).get();
+    QuerySnapshot usersSnapshot = await _db.collection(_users).get();
     final users = usersSnapshot.docs.where((doc) => doc.id != user.email);
 
     return users.map(
@@ -33,7 +33,7 @@ class DbService {
   }
 
   void addCouple(User user, User partner) async {
-    await _db.collection(_couplesCollection).doc(user.email).set(
+    await _db.collection(_couples).doc(user.email).set(
       {
         'partner': partner.email,
       },
@@ -42,12 +42,12 @@ class DbService {
 
   void addTask(User user, Task task) async {
     DocumentSnapshot tasksSnapshot =
-        await _db.collection(_tasksCollection).doc(user.email).get();
+        await _db.collection(_tasks).doc(user.email).get();
 
     if (tasksSnapshot.exists) {
-      await _db.collection(_tasksCollection).doc(user.email).update(
+      await _db.collection(_tasks).doc(user.email).update(
         {
-          'tasks': FieldValue.arrayUnion(
+          _tasks: FieldValue.arrayUnion(
             [
               task.toJson(),
             ],
@@ -55,9 +55,9 @@ class DbService {
         },
       );
     } else {
-      await _db.collection(_tasksCollection).doc(user.email).set(
+      await _db.collection(_tasks).doc(user.email).set(
         {
-          'tasks': FieldValue.arrayUnion(
+          _tasks: FieldValue.arrayUnion(
             [
               task.toJson(),
             ],
@@ -67,20 +67,43 @@ class DbService {
     }
   }
 
-  Future<List<Task>?> getTasks(User partner) async {
-    DocumentSnapshot<Map<String, dynamic>> tasksSnapshot =
-        await _db.collection(_tasksCollection).doc(partner.email).get();
+  Stream<List<Task>> getTasks(User partner) {
+    return _db.collection(_tasks).doc(partner.email).snapshots().map(
+      (tasksSnapshot) {
+        final tasksList = tasksSnapshot.data()?[_tasks] as List<dynamic>?;
 
-    final tasksList = tasksSnapshot.data()?['tasks'] as List<dynamic>?;
+        if (tasksList == null) {
+          return [];
+        }
 
-    if (tasksList == null) {
-      return null;
-    }
+        return tasksList
+            .map(
+              (taskData) => Task.fromJson(taskData),
+            )
+            .toList();
+      },
+    );
+  }
 
-    return tasksList
-        .map(
-          (taskData) => Task.fromJson(taskData),
-        )
-        .toList();
+  void removeTask(User partner, Task task) async {
+    _db.collection(_tasks).doc(partner.email).update(
+      {
+        _tasks: FieldValue.arrayRemove(
+          [
+            task.toJson(),
+          ],
+        ),
+      },
+    );
+
+    _db.collection(_tasks).doc(partner.email).update(
+      {
+        _tasks: FieldValue.arrayUnion(
+          [
+            task.copyWith(status: "done").toJson(),
+          ],
+        ),
+      },
+    );
   }
 }

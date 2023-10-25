@@ -10,14 +10,16 @@ class TasksScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<model.Task> tasks = ref.watch(tasksProvider);
+    List<model.Task>? tasks = ref.watch(tasksProvider).value;
 
     return Column(
       children: [
         const Text('Daily tasks'),
         Expanded(
           child: ListView(
-            children: tasks.map((task) => Task(task: task)).toList(),
+            children: tasks == null
+                ? []
+                : tasks.map((task) => Task(task: task)).toList(),
           ),
         ),
       ],
