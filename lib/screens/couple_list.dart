@@ -23,7 +23,8 @@ class CoupleList extends StatefulHookConsumerWidget {
 }
 
 class _CoupleListState extends ConsumerState<CoupleList> {
-  final pageController = PageController();
+  final PageController pageController = PageController();
+  final DbService dbService = DbService();
 
   @override
   void dispose() {
@@ -34,9 +35,7 @@ class _CoupleListState extends ConsumerState<CoupleList> {
 
   @override
   Widget build(BuildContext context) {
-    List<User> users = ref.watch(usersProvider);
-
-    _choosePartner(users);
+    _setPartner();
 
     return Scaffold(
       appBar: ClAppBar(
@@ -68,10 +67,23 @@ class _CoupleListState extends ConsumerState<CoupleList> {
     );
   }
 
-  void _choosePartner(List<User> users) {
+  void _setPartner() {
+    List<User> users = ref.watch(usersProvider);
     User? clUser = ref.watch(clUserProvider);
+
+    dbService.haveCouple(clUser!).then(
+      (partner) {
+        if (partner == null) {
+          _choosePartner(users, clUser);
+        } else {
+          ref.read(partnerProvider.notifier).set(partner);
+        }
+      },
+    );
+  }
+
+  void _choosePartner(List<User> users, User clUser) {
     User? partner = users.first;
-    DbService dbService = DbService();
 
     if (ref.watch(partnerProvider) == null) {
       WidgetsBinding.instance.addPostFrameCallback(
@@ -97,7 +109,7 @@ class _CoupleListState extends ConsumerState<CoupleList> {
               ElevatedButton(
                 onPressed: () async {
                   ref.read(partnerProvider.notifier).set(partner);
-                  dbService.addCouple(clUser!, partner!);
+                  dbService.addCouple(clUser, partner!);
 
                   if (!mounted) {
                     return;

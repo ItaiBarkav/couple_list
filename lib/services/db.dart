@@ -8,6 +8,7 @@ class DbService {
   static const String _users = 'users';
   static const String _couples = 'couples';
   static const String _tasks = 'tasks';
+  static const String _partner = 'partner';
 
   void addUser(User user) async {
     await _db.collection(_users).doc(user.email).set(
@@ -35,7 +36,23 @@ class DbService {
   void addCouple(User user, User partner) async {
     await _db.collection(_couples).doc(user.email).set(
       {
-        'partner': partner.email,
+        _partner: partner.toJson(),
+      },
+    );
+  }
+
+  Future<User?> haveCouple(User user) async {
+    return await _db.collection(_couples).doc(user.email).get().then(
+      (value) {
+        var partner = value.data();
+
+        if (partner == null) {
+          return null;
+        }
+
+        return User.fromJson(
+          partner[_partner],
+        );
       },
     );
   }
@@ -100,7 +117,7 @@ class DbService {
       {
         _tasks: FieldValue.arrayUnion(
           [
-            task.copyWith(status: "done").toJson(),
+            task.copyWith(status: 'done').toJson(),
           ],
         ),
       },
