@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../providers/rewards_provider.dart';
+import '../providers/score_provider.dart';
 import 'icecream_icon.dart';
 
 class ClAppBar extends HookConsumerWidget implements PreferredSizeWidget {
@@ -12,8 +12,7 @@ class ClAppBar extends HookConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    int sum =
-        ref.watch(rewardsProvider).fold(0, (sum, item) => sum + item.cost);
+    int? score = ref.watch(scoreProvider).value;
 
     return AppBar(
       title: Row(
@@ -24,7 +23,7 @@ class ClAppBar extends HookConsumerWidget implements PreferredSizeWidget {
               ? Row(
                   children: [
                     const IcecreamIcon(),
-                    Text('$sum'),
+                    Text('$score'),
                   ],
                 )
               : Container()

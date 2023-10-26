@@ -22,6 +22,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
 mixin _$User {
   String get email => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
+  int get score => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -33,7 +34,7 @@ abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res, User>;
   @useResult
-  $Res call({String email, String displayName});
+  $Res call({String email, String displayName, int score});
 }
 
 /// @nodoc
@@ -51,6 +52,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   $Res call({
     Object? email = null,
     Object? displayName = null,
+    Object? score = null,
   }) {
     return _then(_value.copyWith(
       email: null == email
@@ -61,6 +63,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String,
+      score: null == score
+          ? _value.score
+          : score // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -71,7 +77,7 @@ abstract class _$$_UserCopyWith<$Res> implements $UserCopyWith<$Res> {
       __$$_UserCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String email, String displayName});
+  $Res call({String email, String displayName, int score});
 }
 
 /// @nodoc
@@ -85,6 +91,7 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
   $Res call({
     Object? email = null,
     Object? displayName = null,
+    Object? score = null,
   }) {
     return _then(_$_User(
       email: null == email
@@ -95,6 +102,10 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String,
+      score: null == score
+          ? _value.score
+          : score // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -102,7 +113,8 @@ class __$$_UserCopyWithImpl<$Res> extends _$UserCopyWithImpl<$Res, _$_User>
 /// @nodoc
 @JsonSerializable()
 class _$_User implements _User {
-  const _$_User({required this.email, required this.displayName});
+  const _$_User(
+      {required this.email, required this.displayName, this.score = 0});
 
   factory _$_User.fromJson(Map<String, dynamic> json) => _$$_UserFromJson(json);
 
@@ -110,10 +122,13 @@ class _$_User implements _User {
   final String email;
   @override
   final String displayName;
+  @override
+  @JsonKey()
+  final int score;
 
   @override
   String toString() {
-    return 'User(email: $email, displayName: $displayName)';
+    return 'User(email: $email, displayName: $displayName, score: $score)';
   }
 
   @override
@@ -123,12 +138,13 @@ class _$_User implements _User {
             other is _$_User &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.displayName, displayName) ||
-                other.displayName == displayName));
+                other.displayName == displayName) &&
+            (identical(other.score, score) || other.score == score));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, email, displayName);
+  int get hashCode => Object.hash(runtimeType, email, displayName, score);
 
   @JsonKey(ignore: true)
   @override
@@ -147,7 +163,8 @@ class _$_User implements _User {
 abstract class _User implements User {
   const factory _User(
       {required final String email,
-      required final String displayName}) = _$_User;
+      required final String displayName,
+      final int score}) = _$_User;
 
   factory _User.fromJson(Map<String, dynamic> json) = _$_User.fromJson;
 
@@ -155,6 +172,8 @@ abstract class _User implements User {
   String get email;
   @override
   String get displayName;
+  @override
+  int get score;
   @override
   @JsonKey(ignore: true)
   _$$_UserCopyWith<_$_User> get copyWith => throw _privateConstructorUsedError;

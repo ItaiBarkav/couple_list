@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/task.dart';
 import '../models/user.dart';
 import '../services/db.dart';
+import 'cluser_provider.dart';
 import 'partner_provider.dart';
 
 part 'tasks_provider.g.dart';
@@ -23,8 +24,9 @@ class Tasks extends _$Tasks {
   }
 
   void remove(Task task) {
+    User? user = ref.watch(clUserProvider);
     User? partner = ref.watch(partnerProvider);
 
-    dbService.removeTask(partner!, task);
+    dbService.completeTask(user!, partner!, task);
   }
 }

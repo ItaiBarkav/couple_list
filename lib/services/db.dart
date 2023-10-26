@@ -11,11 +11,25 @@ class DbService {
   static const String _partner = 'partner';
 
   void addUser(User user) async {
-    await _db.collection(_users).doc(user.email).set(
-      {
-        'displayName': user.displayName,
+    await _db.collection(_users).doc(user.email).get().then(
+      (value) {
+        var userData = value.data();
+
+        if (userData == null) {
+          _db.collection(_users).doc(user.email).set(
+            {
+              'user': user.toJson(),
+            },
+          );
+        }
       },
     );
+  }
+
+  Future<Stream<User>> getUser(User user) async {
+    return _db.collection(_users).doc(user.email).snapshots().map(
+          (value) => User.fromJson(value.data()?['user']),
+        );
   }
 
   Future<List<User>> getUsers(User user) async {
@@ -97,12 +111,13 @@ class DbService {
             .map(
               (taskData) => Task.fromJson(taskData),
             )
+            .where((element) => element.status == 'new')
             .toList();
       },
     );
   }
 
-  void removeTask(User partner, Task task) async {
+  void completeTask(User user, User partner, Task task) async {
     _db.collection(_tasks).doc(partner.email).update(
       {
         _tasks: FieldValue.arrayRemove(
@@ -113,6 +128,8 @@ class DbService {
       },
     );
 
+    _updateScore(user, task.cost);
+
     _db.collection(_tasks).doc(partner.email).update(
       {
         _tasks: FieldValue.arrayUnion(
@@ -122,5 +139,20 @@ class DbService {
         ),
       },
     );
+  }
+
+  Stream<int> getScore(User user) {
+    return _db.collection(_users).doc(user.email).snapshots().map(
+          (value) => User.fromJson(value.data()?['user']).score,
+        );
+  }
+
+  void _updateScore(User user, int score) async {
+    int newScore = user.score + score;
+    print('Score: ' + user.toString());
+    _db
+        .collection(_users)
+        .doc(user.email)
+        .update({'user': user.copyWith(score: newScore).toJson()});
   }
 }

@@ -6,11 +6,11 @@ part of 'users_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$usersHash() => r'02365d22f3a3a736115c43bda063a4c30fce68da';
+String _$usersHash() => r'3346152004ea5d92de4d95c6b1d7a0e003150ca7';
 
 /// See also [Users].
 @ProviderFor(Users)
-final usersProvider = NotifierProvider<Users, List<User>>.internal(
+final usersProvider = AutoDisposeNotifierProvider<Users, List<User>>.internal(
   Users.new,
   name: r'usersProvider',
   debugGetCreateSourceHash:
@@ -19,5 +19,5 @@ final usersProvider = NotifierProvider<Users, List<User>>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef _$Users = Notifier<List<User>>;
+typedef _$Users = AutoDisposeNotifier<List<User>>;
 // ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions
