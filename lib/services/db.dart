@@ -128,9 +128,9 @@ class DbService {
     return users.map(
       (user) {
         final userData = user.data() as Map<String, dynamic>;
-        return User(
-          email: user.id,
-          displayName: userData.values.first,
+
+        return User.fromJson(
+          userData[_user],
         );
       },
     ).toList();

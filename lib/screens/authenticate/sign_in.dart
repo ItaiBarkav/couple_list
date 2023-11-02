@@ -35,12 +35,12 @@ class SignIn extends HookConsumerWidget {
                 if (user == null) {
                   debugPrint('error signing in');
                 } else {
+                  dbService.addUser(user);
                   List<User> users = await dbService.getUsers(user);
                   ref.read(clUserProvider.notifier).set(user);
-                  dbService.addUser(user);
 
                   if (users.isNotEmpty) {
-                    ref.read(usersProvider.notifier).set(users);
+                    ref.watch(usersProvider.notifier).set(users);
                   }
                 }
               },

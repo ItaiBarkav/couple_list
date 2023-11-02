@@ -11,11 +11,6 @@ class Users extends _$Users {
     return [];
   }
 
-  void add(User user) {
-    state.add(user);
-    state = [...state];
-  }
-
   void set(List<User> users) {
     state = [...users];
   }
