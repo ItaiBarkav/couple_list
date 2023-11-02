@@ -16,7 +16,7 @@ class AddTaskFab extends ConsumerWidget {
     final TextEditingController taskTEC = TextEditingController();
     final TextEditingController costTEC = TextEditingController();
     final DbService dbService = DbService();
-    User? user = ref.watch(clUserProvider);
+    User? user = ref.watch(clUserProvider).value;
 
     return FloatingActionButton(
       shape: const CircleBorder(),

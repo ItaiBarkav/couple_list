@@ -1,19 +1,19 @@
-import '/services/db.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
+import '/services/db.dart';
 import '../models/user.dart';
 import '../providers/cluser_provider.dart';
 import '../providers/new_reward_provider.dart';
 import '../providers/partner_provider.dart';
 import '../providers/task_completed_provider.dart';
 import '../providers/users_provider.dart';
-import 'rewards_screen.dart';
-import 'tasks_screen.dart';
 import '../widgets/add_task_fab.dart';
 import '../widgets/cl_app_bar.dart';
 import '../widgets/cl_bottom_app_bar.dart';
+import 'rewards_screen.dart';
+import 'tasks_screen.dart';
 
 class CoupleList extends StatefulHookConsumerWidget {
   const CoupleList({super.key});
@@ -27,19 +27,12 @@ class _CoupleListState extends ConsumerState<CoupleList> {
   final DbService dbService = DbService();
 
   @override
-  void dispose() {
-    super.dispose();
-
-    pageController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     _setPartner();
 
     return Scaffold(
       appBar: ClAppBar(
-        title: 'Hi ${ref.watch(clUserProvider)!.displayName}',
+        title: 'Hi ${ref.watch(clUserProvider).value!.displayName}',
       ),
       body: AnimatedContainer(
         duration: const Duration(seconds: 2),
@@ -67,19 +60,11 @@ class _CoupleListState extends ConsumerState<CoupleList> {
     );
   }
 
-  void _setPartner() {
-    List<User> users = ref.watch(usersProvider);
-    User? clUser = ref.watch(clUserProvider);
+  @override
+  void dispose() {
+    super.dispose();
 
-    dbService.haveCouple(clUser!).then(
-      (partner) {
-        if (partner == null) {
-          _choosePartner(users, clUser);
-        } else {
-          ref.read(partnerProvider.notifier).set(partner);
-        }
-      },
-    );
+    pageController.dispose();
   }
 
   void _choosePartner(List<User> users, User clUser) {
@@ -124,5 +109,20 @@ class _CoupleListState extends ConsumerState<CoupleList> {
         ),
       );
     }
+  }
+
+  void _setPartner() {
+    List<User> users = ref.watch(usersProvider);
+    User? clUser = ref.watch(clUserProvider).value;
+
+    dbService.haveCouple(clUser!).then(
+      (partner) {
+        if (partner == null) {
+          _choosePartner(users, clUser);
+        } else {
+          ref.read(partnerProvider.notifier).set(partner);
+        }
+      },
+    );
   }
 }

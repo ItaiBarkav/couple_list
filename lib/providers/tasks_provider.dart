@@ -24,7 +24,7 @@ class Tasks extends _$Tasks {
   }
 
   void remove(Task task) {
-    User? user = ref.watch(clUserProvider);
+    User? user = ref.watch(clUserProvider).value;
     User? partner = ref.watch(partnerProvider);
 
     dbService.completeTask(user!, partner!, task);

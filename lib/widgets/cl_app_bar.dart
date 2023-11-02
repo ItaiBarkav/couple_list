@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../providers/score_provider.dart';
+import '../providers/cluser_provider.dart';
 import 'icecream_icon.dart';
 
 class ClAppBar extends HookConsumerWidget implements PreferredSizeWidget {
@@ -11,9 +11,10 @@ class ClAppBar extends HookConsumerWidget implements PreferredSizeWidget {
   const ClAppBar({super.key, this.showScore = true, this.title = 'CoupleList'});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    int? score = ref.watch(scoreProvider).value;
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return AppBar(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -23,7 +24,7 @@ class ClAppBar extends HookConsumerWidget implements PreferredSizeWidget {
               ? Row(
                   children: [
                     const IcecreamIcon(),
-                    Text('$score'),
+                    Text('${ref.watch(clUserProvider).value!.score}'),
                   ],
                 )
               : Container()
@@ -37,7 +38,4 @@ class ClAppBar extends HookConsumerWidget implements PreferredSizeWidget {
       ),
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

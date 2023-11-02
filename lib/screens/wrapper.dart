@@ -11,7 +11,7 @@ class Wrapper extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    User? user = ref.watch(clUserProvider);
+    User? user = ref.watch(clUserProvider).value;
 
     if (user == null) {
       return const SignIn();
