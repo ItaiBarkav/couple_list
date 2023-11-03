@@ -14,7 +14,7 @@ class Tasks extends _$Tasks {
 
   @override
   Stream<List<Task>> build() {
-    User? partner = ref.watch(partnerProvider);
+    User? partner = _getPartner();
 
     if (partner == null) {
       return const Stream.empty();
@@ -25,8 +25,11 @@ class Tasks extends _$Tasks {
 
   void remove(Task task) {
     User? user = ref.watch(clUserProvider).value;
-    User? partner = ref.watch(partnerProvider);
 
-    dbService.completeTask(user!, partner!, task);
+    dbService.completeTask(user!, _getPartner()!, task);
+  }
+
+  User? _getPartner() {
+    return ref.watch(partnerProvider.select((partner) => partner.value));
   }
 }
