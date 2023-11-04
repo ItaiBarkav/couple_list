@@ -94,8 +94,8 @@ class DbService {
         );
   }
 
-  Stream<List<Task>> getTasks(User partner) {
-    return _db.collection(_tasks).doc(partner.email).snapshots().map(
+  Stream<List<Task>> getTasks(User user) {
+    return _db.collection(_tasks).doc(user.email).snapshots().map(
       (tasksSnapshot) {
         final tasksList = tasksSnapshot.data()?[_tasks] as List<dynamic>?;
 
