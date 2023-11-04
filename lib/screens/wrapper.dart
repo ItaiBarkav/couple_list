@@ -1,3 +1,4 @@
+import 'package:couple_list/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -11,11 +12,16 @@ class Wrapper extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    User? user = ref.watch(clUserProvider).value;
+    final AuthService authService = AuthService();
 
-    if (user == null) {
+    User? currentUser = authService.currentLogIn();
+    ref.watch(clUserProvider);
+
+    if (currentUser == null) {
       return const SignIn();
     }
+
+    ref.read(clUserProvider.notifier).set(currentUser);
 
     return const CoupleList();
   }

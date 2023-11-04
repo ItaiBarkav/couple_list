@@ -6,6 +6,17 @@ import '../models/user.dart' as model;
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  model.User? currentLogIn() {
+    User? user = _auth.currentUser;
+
+    return user == null
+        ? null
+        : model.User(
+            email: user.email!,
+            displayName: user.displayName!,
+          );
+  }
+
   Future<model.User?> signInWithGoogle() async {
     GoogleSignInAccount? account = await GoogleSignIn().signIn();
     GoogleSignInAuthentication authentication = await account!.authentication;

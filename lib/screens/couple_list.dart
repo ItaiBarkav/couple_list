@@ -34,7 +34,7 @@ class _CoupleListState extends ConsumerState<CoupleList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ClAppBar(
-        title: 'Hi ${ref.watch(clUserProvider).value!.displayName}',
+        title: 'Hi ${ref.watch(clUserProvider).value?.displayName}',
       ),
       body: AnimatedContainer(
           duration: const Duration(seconds: 2),
@@ -69,7 +69,7 @@ class _CoupleListState extends ConsumerState<CoupleList> {
                           return const CircularProgressIndicator();
                         }
 
-                        return snapshot.data!;
+                        return const CircularProgressIndicator();
                       },
                     )),
       floatingActionButton: const AddTaskFab(),
@@ -119,13 +119,13 @@ class _CoupleListState extends ConsumerState<CoupleList> {
   }
 
   Future<Widget?> _setPartner() async {
-    List<User> users = ref.watch(usersProvider);
+    List<User>? users = ref.watch(usersProvider).value;
     User? clUser = ref.watch(clUserProvider).value;
 
     return await _dbService.haveCouple(clUser!).then(
       (partner) {
         if (partner == null) {
-          return _choosePartner(users, clUser);
+          return _choosePartner(users!, clUser);
         }
 
         ref.read(partnerProvider.notifier).set(partner);

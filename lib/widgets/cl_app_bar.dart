@@ -24,7 +24,7 @@ class ClAppBar extends HookConsumerWidget implements PreferredSizeWidget {
               ? Row(
                   children: [
                     const IcecreamIcon(),
-                    Text('${ref.watch(clUserProvider).value!.score}'),
+                    Text('${ref.watch(clUserProvider).value?.score}'),
                   ],
                 )
               : Container()
